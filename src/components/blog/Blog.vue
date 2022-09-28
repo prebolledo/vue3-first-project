@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import Pagination from "./Pagination.vue";
-import List from "./List.vue";
 import {
   movePage,
   page,
@@ -9,7 +7,15 @@ import {
   to,
   loadPosts,
   maxPage,
+  loading,
 } from './blog-helpers';
+import BlogPagination from './BlogPagination.vue';
+import BlogList from './BlogList.vue';
+import { onMounted } from 'vue';
+
+/*onMounted(async () => {
+  await loadPosts();
+})*/
 
 loadPosts();
 
@@ -17,7 +23,10 @@ loadPosts();
 
 <template>
   <section class="container-fluid mt-4">
-    <Pagination @movePage='movePage' :page='page' :maxPage="maxPage" />
-    <List :posts='posts.slice(from, to)' />
+    <BlogPagination @movePage='movePage' :page='page' :maxPage="maxPage" />
+    <div v-if="loading">
+      Cargando...
+    </div>
+    <BlogList v-if="!loading" :posts='posts.slice(from, to)' />
   </section>
 </template>

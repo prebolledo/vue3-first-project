@@ -7,6 +7,7 @@ export const from: Ref<number>  = ref<number>(0);
 export const to: Ref<number>  = ref<number>(MAX_POST_PAGE);
 export const page: Ref<number>  = ref<number>(1);
 export const maxPage: Ref<number>  = ref<number>(1);
+export const loading: Ref<boolean>  = ref<boolean>(false);
 
 export const movePage = (num: number): void => {
   let _from: number = from.value + MAX_POST_PAGE * num;
@@ -30,12 +31,21 @@ export const movePage = (num: number): void => {
   to.value = _to;
 };
 
-export const loadPosts = () => fetch('https://jsonplaceholder.typicode.com/posts')
-.then((resp) => resp.json())
-.then((payload: Post[]) => {
-  posts.value = payload;
-  if (posts.value.length > 0) {
-    page.value = 1;
-    maxPage.value = Math.round(posts.value.length / MAX_POST_PAGE);
+export const loadPosts = async () => {
+  loading.value = true;
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts')
+    posts.value = await response.json();
+    if (posts.value.length > 0) {
+      page.value = 1;
+      maxPage.value = Math.round(posts.value.length / MAX_POST_PAGE);
+    }
+  } catch(error) {
+    console.log({
+      at: 'loadPosts',
+      error,
+    });
+  } finally {
+    loading.value = false;
   }
-});
+};
