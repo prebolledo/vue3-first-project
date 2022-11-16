@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Post } from "./common";
+import type { Post } from "@/components/blog/composables/posts";
 import BlogPost from "./BlogPost.vue";
 
 type Props = {

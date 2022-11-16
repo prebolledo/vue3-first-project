@@ -1,23 +1,27 @@
 <script lang="ts" setup>
+import { onMounted } from 'vue';
+import { usePagination } from './composables/pagination';
+
 type Props = {
-  page: number,
-  maxPage: number
+  maxPerPage: number,
 };
 
-interface Emits {
-  (e: 'movePage', num: number): void
-};
+const { maxPerPage }: Props = defineProps<Props>();
 
-const { page }: Props = defineProps<Props>();
-const emit = defineEmits<Emits>();
+const pagination = usePagination();
+pagination.init(maxPerPage);
 </script>
 
 <template>
   <nav aria-label="Page navigation example">
-    <h2>Page {{page}} of {{maxPage}}</h2>
+    <h2>Page {{pagination.page}} of {{pagination.maxPage}}</h2>
     <ul class="pagination">
-      <li class="page-item" @click="emit('movePage', -1)"><button class="page-link" href="#" :disabled="page === 1">Previous</button></li>
-      <li class="page-item" @click="emit('movePage', 1)"><button class="page-link" href="#" :disabled="page === maxPage">Next</button></li>
+      <li class="page-item" @click="pagination.move(-1)">
+        <button class="page-link" href="#" :disabled="pagination.isFirstPage()">Previous</button>
+      </li>
+      <li class="page-item" @click="pagination.move(1)">
+        <button class="page-link" href="#" :disabled="pagination.isLastPage()">Next</button>
+      </li>
     </ul>
   </nav>
 </template>
