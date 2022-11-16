@@ -7,7 +7,7 @@ type Props = {
 };
 
 const { post }: Props = defineProps<Props>();
-const useFavorites = useFavoritesStore();
+const favoritesStore = useFavoritesStore();
 
 </script>
 
@@ -18,8 +18,8 @@ const useFavorites = useFavoritesStore();
       <p class="card-text">>{{post.body}}</p>
       <router-link :to="`/blog/post/${post.id}`">Detail</router-link>
       <div>
-        <button :disabled="useFavorites.exists(post.id)" class="btn btn-primary" @click="useFavorites.add(post.id)">Add Fav</button>
-        <span v-if="useFavorites.exists(post.id)">is fav</span>
+        <button :disabled="favoritesStore.exists(post.id)" class="btn btn-primary" @click="favoritesStore.add(post.id)">Add Fav</button>
+        <span v-if="favoritesStore.exists(post.id)">is fav</span>
       </div>
     </div>
   </div>
